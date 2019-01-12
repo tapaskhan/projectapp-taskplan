@@ -7,11 +7,27 @@ import java.util.Date;
 public class ProjectBO {
 
     private long id;
-    private String projectDesc;  
-
+    private String projectDesc; 
     private int priority; 
     private Date startDate;
     private Date endDate;
+    private UserBO user;
+    private int taskCount;
+    private int taskCompleted;
+    
+	public int getTaskCount() {
+		return taskCount;
+	}
+	public void setTaskCount(int taskCount) {
+		this.taskCount = taskCount;
+	}
+	public int getTaskCompleted() {
+		return taskCompleted;
+	}
+	public void setTaskCompleted(int taskCompleted) {
+		this.taskCompleted = taskCompleted;
+	}
+	
 	public long getId() {
 		return id;
 	}
@@ -41,6 +57,12 @@ public class ProjectBO {
 	}
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
+	}
+	public UserBO getUser() {
+		return user;
+	}
+	public void setUser(UserBO user) {
+		this.user = user;
 	}
 
 }

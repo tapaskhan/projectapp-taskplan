@@ -8,4 +8,5 @@ public interface IProjectService {
 
 	List<ProjectBO> findAllProjects();
 	ProjectBO createProject(ProjectBO projectBO);
+	ProjectBO updateProject(String projectId,ProjectBO projectBO);
 }

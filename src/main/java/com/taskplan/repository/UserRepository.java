@@ -6,11 +6,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import com.taskplan.dao.entity.ProjectEntity;
+import com.taskplan.dao.entity.UserEntity;
 
 @Repository
-public interface ProjectRepository extends JpaRepository<ProjectEntity, Long>{
+public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
-	//@Query(IQuery.PROJECT_FINDALL)
-	//List<ProjectEntity> findAllProjects();
+	@Query(IQuery.USERS_FIND_BY_NULL_PROJECT_ID)
+	List<UserEntity> findAllUnassignedUsers();
 }
