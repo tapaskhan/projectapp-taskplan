@@ -12,17 +12,23 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.taskplan.model.UserBO;
+import com.taskplan.service.IUserService;
 import com.taskplan.service.impl.UserService;
 
 @RestController
 public class UserController {
 
 	@Autowired
-	private UserService userService;
+	private IUserService userService;
 	
 	@RequestMapping(value="/projectapp/users",method=RequestMethod.GET)
 	public ResponseEntity<List<UserBO>> getAllUsers(){
 		List<UserBO> userBOlist=userService.findAllUnAssignedUsers();
+		return new ResponseEntity<List<UserBO>>(userBOlist,HttpStatus.OK);
+	}
+	@RequestMapping(value="/projectapp/taskusers",method=RequestMethod.GET)
+	public ResponseEntity<List<UserBO>> getAllTaskUsers(){
+		List<UserBO> userBOlist=userService.findAllUnAssignedTaskUsers();
 		return new ResponseEntity<List<UserBO>>(userBOlist,HttpStatus.OK);
 	}
 	@RequestMapping(value="/projectapp/user",method=RequestMethod.POST)

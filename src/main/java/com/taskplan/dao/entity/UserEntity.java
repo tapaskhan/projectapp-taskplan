@@ -35,6 +35,10 @@ public class UserEntity implements Serializable{
 	@OneToOne
 	@JoinColumn(name="project_id")
 	private ProjectEntity projectEntity;
+	
+	@OneToOne
+	@JoinColumn(name="task_id")
+	private TaskEntity taskEntity;
 
 
 	public long getId() {
@@ -75,6 +79,14 @@ public class UserEntity implements Serializable{
 
 	public void setProjectEntity(ProjectEntity projectEntity) {
 		this.projectEntity = projectEntity;
+	}
+
+	public TaskEntity getTaskEntity() {
+		return taskEntity;
+	}
+
+	public void setTaskEntity(TaskEntity taskEntity) {
+		this.taskEntity = taskEntity;
 	}
  	
  	

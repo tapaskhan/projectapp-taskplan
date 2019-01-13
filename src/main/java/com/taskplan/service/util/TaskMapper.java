@@ -38,13 +38,27 @@ public class TaskMapper extends BaseMapper<TaskBO, TaskEntity> {
 	}
 	@Override
 	public TaskBO convertToResource(TaskEntity taskEntity){	
-		TaskBO taskBO=super.convertToResource(taskEntity);
+		//TaskBO taskBO=super.convertToResource(taskEntity);
+		TaskBO taskBO=mapToTaskBO(taskEntity);
 		updateTaskBO(taskBO,taskEntity);		
+		return taskBO;
+	}
+	private TaskBO mapToTaskBO(TaskEntity taskEntity) {
+		TaskBO taskBO=new TaskBO();
+		taskBO.setEndDate(taskEntity.getEndDate());
+		taskBO.setId(taskEntity.getId());
+		taskBO.setPriority(taskEntity.getPriority());
+		taskBO.setStartDate(taskEntity.getStartDate());
+		taskBO.setStatus(taskEntity.getStatus());
+		taskBO.setTaskDesc(taskEntity.getTaskDesc());
+		if(taskEntity.getTaskDesc()==null) {
+			taskBO.setParentTask(true);
+		}
 		return taskBO;
 	}
 	private void updateTaskBO(TaskBO taskBO,TaskEntity taskEntity) {
 		if(taskEntity.getParentTaskEntity()!=null) {					
-			taskBO.setParentTask(convertToParentTaskBO(taskEntity.getParentTaskEntity()));
+			taskBO.setParentTaskDetails(convertToParentTaskBO(taskEntity.getParentTaskEntity()));
 	    }
 		if(taskEntity.getProjectEntity()!=null) {
 				taskBO.setProject(new ProjectMapper().convertToResource(taskEntity.getProjectEntity()));

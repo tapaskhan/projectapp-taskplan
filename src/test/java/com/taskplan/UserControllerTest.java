@@ -31,5 +31,9 @@ public class UserControllerTest {
 	public void testUpdateUser() throws Exception {
 		
 	}
+	@Test
+	public void testGetAllTaskUsers() throws Exception {
+		
+	}
 
 }

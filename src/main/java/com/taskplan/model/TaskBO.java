@@ -2,6 +2,7 @@ package com.taskplan.model;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.taskplan.service.util.StatusEnum;
 
 
@@ -13,13 +14,14 @@ public class TaskBO {
    private int priority;	     
    private Date startDate;	     
    private Date endDate;     
-   private StatusEnum status;	     
+   private StatusEnum status;
+   @JsonProperty
    private boolean isParentTask;
    private ProjectBO project;
    private UserBO user;
-   private ParentTaskBO parentTask;
+   private ParentTaskBO parentTaskDetails;
    
-public boolean isParentTask() {
+public boolean getIsParentTask() {
 	return isParentTask;
 }
 
@@ -97,13 +99,15 @@ public void setUser(UserBO user) {
 	this.user = user;
 }
 
-public ParentTaskBO getParentTask() {
-	return parentTask;
+public ParentTaskBO getParentTaskDetails() {
+	return parentTaskDetails;
 }
 
-public void setParentTask(ParentTaskBO parentTask) {
-	this.parentTask = parentTask;
+public void setParentTaskDetails(ParentTaskBO parentTaskDetails) {
+	this.parentTaskDetails = parentTaskDetails;
 }
+
+
 
 
 

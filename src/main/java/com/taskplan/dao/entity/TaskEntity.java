@@ -60,9 +60,9 @@ public class TaskEntity implements Serializable {
   	@JoinColumn(name="project_id")
   	private ProjectEntity projectEntity;
   	
-    @OneToOne(cascade=CascadeType.ALL)
-    @PrimaryKeyJoinColumn 
+  	@OneToOne(mappedBy="taskEntity",cascade=CascadeType.ALL)	   
     private UserEntity userEntity;
+    
 
 	public long getId() {
 		return id;
@@ -128,5 +128,9 @@ public class TaskEntity implements Serializable {
 
 	public void setUserEntity(UserEntity userEntity) {
 		this.userEntity = userEntity;
+	}
+
+	public StatusEnum getStatus() {
+		return status;
 	}
 }

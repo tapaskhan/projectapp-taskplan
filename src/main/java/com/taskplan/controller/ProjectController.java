@@ -12,13 +12,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.taskplan.model.ProjectBO;
+import com.taskplan.service.IProjectService;
 import com.taskplan.service.impl.ProjectService;
 
 @RestController
 public class ProjectController {
 
 	@Autowired
-	private ProjectService projectService;
+	private IProjectService projectService;
 	
 	@RequestMapping(value="/projectapp/projects",method=RequestMethod.GET)
 	public ResponseEntity<List<ProjectBO>> getAllProjects(){

@@ -13,4 +13,6 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
 	@Query(IQuery.USERS_FIND_BY_NULL_PROJECT_ID)
 	List<UserEntity> findAllUnassignedUsers();
+	@Query(IQuery.USERS_FIND_BY_NULL_TASK_ID)
+	List<UserEntity> findAllUnassignedTaskUsers();
 }

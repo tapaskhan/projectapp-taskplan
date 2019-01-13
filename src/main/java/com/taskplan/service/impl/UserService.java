@@ -24,6 +24,13 @@ public class UserService implements IUserService {
 		return userBOList;
 	}
 	@Override
+	public List<UserBO> findAllUnAssignedTaskUsers() {
+		List<UserEntity> userEntityList= userRepo.findAllUnassignedTaskUsers();
+		UserMapper mapper=new UserMapper();
+		List<UserBO> userBOList=mapper.convertToUserBO(userEntityList);
+		return userBOList;
+	}
+	@Override
 	public UserBO createUser(UserBO userBO) {
 		UserMapper mapper=new UserMapper();
 		UserEntity userEntity=mapper.convertToEntity(userBO);
@@ -45,4 +52,5 @@ public class UserService implements IUserService {
 		}
 		return savedUserBO;
 	}
+	
 }

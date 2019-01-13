@@ -14,13 +14,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.taskplan.model.ParentTaskBO;
 import com.taskplan.model.TaskBO;
+import com.taskplan.service.ITaskService;
 import com.taskplan.service.impl.TaskService;
 
 @RestController
 public class TaskController {
 
 	@Autowired
-	private TaskService taskService;
+	private ITaskService taskService;
 	
 	@RequestMapping(value="/projectapp/tasks",method=RequestMethod.GET)
 	public ResponseEntity<List<TaskBO>> getAllTasks(@RequestParam String projectId){

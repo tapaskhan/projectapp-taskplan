@@ -32,4 +32,12 @@ public class TaskControllerTest {
 	public void testUpdateTask() throws Exception {
 		
 	}
+	@Test
+	public void testUpdateParentTask() throws Exception {
+		
+	}
+	@Test
+	public void testUpdateUser() throws Exception {
+		
+	}
 }

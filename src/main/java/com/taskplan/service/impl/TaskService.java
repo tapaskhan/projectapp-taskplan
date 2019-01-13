@@ -54,26 +54,32 @@ public class TaskService implements ITaskService{
 			if(taskBO.getUser()!=null) {
 				userEntity=userRepo.getOne(taskBO.getUser().getId());
 			}
-			if(taskBO.isParentTask()) {
+			if(taskBO.getIsParentTask()) {
 				ParentTaskEntity parentTaskEntity=new ParentTaskEntity();
-				parentTaskEntity.setParentTaskDec(taskBO.getParentTask().getParentTaskDec());
+				parentTaskEntity.setParentTaskDec(taskBO.getParentTaskDetails().getParentTaskDec());
 				TaskEntity taskEntity=new TaskEntity(); 
 				taskEntity.setProjectEntity(projectEntity);
 				taskEntity.setUserEntity(userEntity);
 				parentTaskEntity.addTaskEntity(taskEntity);
 				ParentTaskEntity savedParentTaskEntity=parentTaskRepo.save(parentTaskEntity);
-				TaskEntity savedTaskEntity=savedParentTaskEntity.getTaskEntityList().get(0);
+				taskEntity.setParentTaskEntity(savedParentTaskEntity);
+				TaskEntity savedTaskEntity=taskRepo.save(taskEntity);
 				savedTaskBO=mapper.convertToResource(savedTaskEntity);
 			}else {
 				ParentTaskEntity parentTaskEntity=null;
-				if(taskBO.getParentTask()!=null) {
-					parentTaskEntity =parentTaskRepo.getOne(taskBO.getParentTask().getId());
+				if(taskBO.getParentTaskDetails()!=null) {
+					parentTaskEntity =parentTaskRepo.getOne(taskBO.getParentTaskDetails().getId());
 				}
 				TaskEntity taskEntity=mapper.convertToEntity(taskBO);
 				taskEntity.setParentTaskEntity(parentTaskEntity);
 				taskEntity.setUserEntity(userEntity);
 				taskEntity.setProjectEntity(projectEntity);
 				TaskEntity savedTaskEntity =taskRepo.save(taskEntity);
+				if(userEntity!=null) {
+					userEntity.setTaskEntity(savedTaskEntity);
+					UserEntity saveduserEntity=userRepo.save(userEntity);
+					savedTaskEntity.setUserEntity(saveduserEntity);
+				}
 				savedTaskBO=mapper.convertToResource(savedTaskEntity);
 			}
 		}
@@ -90,10 +96,11 @@ public class TaskService implements ITaskService{
 		TaskEntity taskEntity=taskRepo.getOne(new Long(taskid));
 		TaskBO savedTaskBO=null;
 		ParentTaskEntity parentTaskEntity=null;
-		if(taskBO.getParentTask()!=null) {
-			parentTaskEntity =parentTaskRepo.getOne(taskBO.getParentTask().getId());
+		if(taskBO.getParentTaskDetails()!=null) {
+			parentTaskEntity =parentTaskRepo.getOne(taskBO.getParentTaskDetails().getId());
 		}
 		UserEntity userEntity=null;
+		UserEntity previousUserEntity=taskEntity.getUserEntity();
 		if(taskBO.getUser()!=null) {
 			userEntity=userRepo.getOne(taskBO.getUser().getId());
 		}
@@ -102,9 +109,19 @@ public class TaskService implements ITaskService{
 			taskEntity.setPriority(taskBO.getPriority());
 			taskEntity.setTaskDesc(taskBO.getTaskDesc());
 			taskEntity.setStartDate(taskBO.getStartDate());
-			taskEntity.setParentTaskEntity(parentTaskEntity);
+			taskEntity.setStatus(taskBO.getStatus());
+			taskEntity.setParentTaskEntity(parentTaskEntity);			
 			taskEntity.setUserEntity(userEntity);
 			TaskEntity savedTaskEntity =taskRepo.save(taskEntity);
+			if(userEntity!=null) {
+				userEntity.setTaskEntity(savedTaskEntity);
+				UserEntity saveduserEntity=userRepo.save(userEntity);
+				savedTaskEntity.setUserEntity(saveduserEntity);
+				if(previousUserEntity.getId()!=userEntity.getId()) {
+					previousUserEntity.setTaskEntity(null);
+					userRepo.save(previousUserEntity);
+				}
+			}
 			savedTaskBO=mapper.convertToResource(savedTaskEntity);
 			
 		}		
