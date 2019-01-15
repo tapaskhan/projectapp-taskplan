@@ -3,11 +3,13 @@ package com.taskplan.service.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
 import com.taskplan.dao.entity.ParentTaskEntity;
 import com.taskplan.dao.entity.TaskEntity;
 import com.taskplan.model.ParentTaskBO;
 import com.taskplan.model.TaskBO;
-
+@Component
 public class TaskMapper extends BaseMapper<TaskBO, TaskEntity> {
 
 	public List<TaskBO> convertToTaskBOList(List<TaskEntity> taskEntityList){

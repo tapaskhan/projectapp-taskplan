@@ -20,30 +20,32 @@ public class ProjectService implements IProjectService {
 	private ProjectRepository projectRepo;
 	@Autowired
 	private UserRepository userRepo;
+	@Autowired
+	private ProjectMapper mapper;
 	
 	@Override
 	public List<ProjectBO> findAllProjects() {
-		List<ProjectEntity> projectEntityList= projectRepo.findAll();
-		ProjectMapper mapper=new ProjectMapper();
+		List<ProjectEntity> projectEntityList= projectRepo.findAll();		
 		List<ProjectBO> projectBOList=mapper.convertToProjectBO(projectEntityList);
 		return projectBOList;
 	}
 	@Override
-	public ProjectBO createProject(ProjectBO projectBO) {
-		ProjectMapper mapper=new ProjectMapper();
-		ProjectEntity projectEntity=mapper.convertToEntity(projectBO);
+	public ProjectBO createProject(ProjectBO projectBO) {		
+		ProjectEntity projectEntity=mapper.convertToEntity(projectBO);		
+		ProjectEntity savedProjectEntity =projectRepo.save(projectEntity);
 		if(projectBO.getUser()!=null) {
 			UserEntity userEntity=userRepo.getOne(new Long(projectBO.getUser().getId()));
-			projectEntity.setUserEntity(userEntity);
+			userEntity.setProjectEntity(savedProjectEntity);
+			UserEntity savedUserEntity=userRepo.save(userEntity);
+			savedProjectEntity.setUserEntity(savedUserEntity);
 		}
-		ProjectEntity savedProjectEntity =projectRepo.save(projectEntity);
 		ProjectBO savedProjectBO=mapper.convertToResource(savedProjectEntity);
 		return savedProjectBO;
 	}
 	@Override
-	public ProjectBO updateProject(String projectId,ProjectBO projectBO) {
-		ProjectMapper mapper=new ProjectMapper();
+	public ProjectBO updateProject(String projectId,ProjectBO projectBO) {		
 		ProjectEntity projectEntity=projectRepo.getOne(new Long(projectId));
+		UserEntity previousUserEntity=projectEntity.getUserEntity();
 		ProjectBO savedProjectBO=null;
 		if(projectEntity!=null) {
 			projectEntity.setEndDate(projectBO.getEndDate());
@@ -51,11 +53,17 @@ public class ProjectService implements IProjectService {
 			projectEntity.setProjectDesc(projectBO.getProjectDesc());
 			projectEntity.setStartDate(projectBO.getStartDate());
 						
-			//ProjectEntity savedProjectEntity =projectRepo.save(projectEntity);
+			ProjectEntity savedProjectEntity =projectRepo.save(projectEntity);
+			
 			if(projectBO.getUser()!=null) {
 				UserEntity userEntity=userRepo.getOne(new Long(projectBO.getUser().getId()));
-				userEntity.setProjectEntity(projectEntity);
+				userEntity.setProjectEntity(savedProjectEntity);
 				UserEntity savedUserEntity=userRepo.save(userEntity);
+				savedUserEntity.setProjectEntity(savedProjectEntity);
+				if(previousUserEntity!=null && previousUserEntity.getId()!=userEntity.getId()) {
+					previousUserEntity.setProjectEntity(null);
+					userRepo.save(previousUserEntity);
+				}
 				savedProjectBO=mapper.convertToResource(savedUserEntity.getProjectEntity());
 				savedProjectBO.setUser(new UserMapper().convertToResource(savedUserEntity));
 			}

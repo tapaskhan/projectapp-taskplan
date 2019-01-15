@@ -23,7 +23,7 @@ import org.hibernate.annotations.Cascade;
 @Table(name="project")
 public class ProjectEntity implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+	
 	
 
     @Id

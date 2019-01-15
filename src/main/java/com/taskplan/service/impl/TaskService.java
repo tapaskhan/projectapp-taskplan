@@ -29,24 +29,23 @@ public class TaskService implements ITaskService{
 	private ParentProjectRepository parentTaskRepo;
 	@Autowired
 	private UserRepository userRepo;
+	@Autowired
+	private TaskMapper mapper;
 	@Override
 	public List<TaskBO> findAllTasksByProjectId(String projectId) {
-		List<TaskEntity> taskEntityList= taskRepo.findAllTasksByProjectId(new Long(projectId));
-		TaskMapper mapper=new TaskMapper();
+		List<TaskEntity> taskEntityList= taskRepo.findAllTasksByProjectId(new Long(projectId));		
 		List<TaskBO> taskBOList=mapper.convertToTaskBOList(taskEntityList);
 		return taskBOList;
 	}
 	@Override
 	public List<ParentTaskBO> findAllParentTasksByProjectId(String projectId) {
-		List<TaskEntity> taskEntityList= taskRepo.findAllTasksByProjectId(new Long(projectId));
-		TaskMapper mapper=new TaskMapper();
+		List<TaskEntity> taskEntityList= taskRepo.findAllTasksByProjectId(new Long(projectId));		
 		List<ParentTaskBO> parentTaskBOList=mapper.convertToParentTaskBOList(taskEntityList);
 		return parentTaskBOList;
 	}
 
 	@Override
-	public TaskBO createTasks(TaskBO taskBO) {
-		TaskMapper mapper=new TaskMapper();
+	public TaskBO createTasks(TaskBO taskBO) {		
 		TaskBO savedTaskBO=null;
 		if(taskBO.getProject()!=null) {
 			ProjectEntity projectEntity=projectRepo.getOne(new Long(taskBO.getProject().getId()));
@@ -91,8 +90,7 @@ public class TaskService implements ITaskService{
 		if(taskBO==null) {
 			return null;
 		}
-
-		TaskMapper mapper=new TaskMapper();
+		
 		TaskEntity taskEntity=taskRepo.getOne(new Long(taskid));
 		TaskBO savedTaskBO=null;
 		ParentTaskEntity parentTaskEntity=null;
@@ -117,7 +115,7 @@ public class TaskService implements ITaskService{
 				userEntity.setTaskEntity(savedTaskEntity);
 				UserEntity saveduserEntity=userRepo.save(userEntity);
 				savedTaskEntity.setUserEntity(saveduserEntity);
-				if(previousUserEntity.getId()!=userEntity.getId()) {
+				if(previousUserEntity!=null && previousUserEntity.getId()!=userEntity.getId()) {
 					previousUserEntity.setTaskEntity(null);
 					userRepo.save(previousUserEntity);
 				}

@@ -3,10 +3,12 @@ package com.taskplan.service.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
 import com.taskplan.dao.entity.ProjectEntity;
 import com.taskplan.model.ProjectBO;
 import com.taskplan.model.TaskBO;
-
+@Component
 public class ProjectMapper extends BaseMapper<ProjectBO, ProjectEntity> {
 
 	public List<ProjectBO> convertToProjectBO(List<ProjectEntity> projectEntityList){

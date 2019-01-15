@@ -3,9 +3,12 @@ package com.taskplan.service.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
 import com.taskplan.dao.entity.UserEntity;
 import com.taskplan.model.UserBO;
 
+@Component
 public class UserMapper extends BaseMapper<UserBO, UserEntity>{
 
 	public List<UserBO> convertToUserBO(List<UserEntity> userEntityList){
