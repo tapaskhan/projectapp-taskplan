@@ -11,7 +11,7 @@ import com.taskplan.dao.entity.TaskEntity;
 import com.taskplan.dao.entity.UserEntity;
 import com.taskplan.model.ParentTaskBO;
 import com.taskplan.model.TaskBO;
-import com.taskplan.repository.ParentProjectRepository;
+import com.taskplan.repository.ParentTaskRepository;
 import com.taskplan.repository.ProjectRepository;
 import com.taskplan.repository.TaskRepository;
 import com.taskplan.repository.UserRepository;
@@ -26,7 +26,7 @@ public class TaskService implements ITaskService{
 	@Autowired
 	private ProjectRepository projectRepo;
 	@Autowired
-	private ParentProjectRepository parentTaskRepo;
+	private ParentTaskRepository parentTaskRepo;
 	@Autowired
 	private UserRepository userRepo;
 	@Autowired

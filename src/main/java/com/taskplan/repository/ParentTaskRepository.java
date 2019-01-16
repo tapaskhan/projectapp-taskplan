@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.taskplan.dao.entity.ParentTaskEntity;
 
 @Repository
-public interface ParentProjectRepository extends JpaRepository<ParentTaskEntity, Long> {
+public interface ParentTaskRepository extends JpaRepository<ParentTaskEntity, Long> {
 
 }
