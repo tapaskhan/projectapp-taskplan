@@ -22,6 +22,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.taskplan.dao.entity.ProjectEntity;
+import com.taskplan.dao.entity.TaskEntity;
 import com.taskplan.dao.entity.UserEntity;
 import com.taskplan.model.ProjectBO;
 import com.taskplan.model.UserBO;
@@ -29,6 +30,7 @@ import com.taskplan.repository.ProjectRepository;
 import com.taskplan.repository.UserRepository;
 import com.taskplan.service.impl.ProjectService;
 import com.taskplan.service.util.ProjectMapper;
+import com.taskplan.service.util.StatusEnum;
 
 @RunWith(SpringRunner.class)
 public class ProjectServiceTest {
@@ -86,10 +88,30 @@ public class ProjectServiceTest {
 		return userEntity;
 		
 	}
+	private TaskEntity createTaskEntity(int id ,String startDateStr,String endDateStr,int priority,String taskDesc) throws Exception {
+		//String startDateStr="2019-01-09";  
+	    Date startDate=new SimpleDateFormat("yyyy-MM-dd").parse(startDateStr); 
+	    //String endDateStr="2019-01-20";  
+	    Date endDate=new SimpleDateFormat("yyyy-MM-dd").parse(endDateStr);
+		TaskEntity taskEntity=new TaskEntity();
+		taskEntity.setStartDate(startDate);
+		taskEntity.setEndDate(endDate);
+		taskEntity.setStatus(StatusEnum.COMPLETE);
+		taskEntity.setId(id);
+		taskEntity.setPriority(priority);
+		taskEntity.setTaskDesc(taskDesc);
+		
+		return taskEntity;
+		
+	}
 	@Test
 	public void testFindAllProjects() throws Exception{
 		List<ProjectEntity> projectEntityList = new ArrayList<ProjectEntity>();
+		List<TaskEntity> taskEntityList = new ArrayList<TaskEntity>();
+		TaskEntity taskEntity=createTaskEntity(1,"2019-01-09","2019-01-20",1,"Task Desc");
 		ProjectEntity projectEntity=createProjectEntity("2019-01-09","2019-01-20","Test Project",1,1);
+		taskEntityList.add(taskEntity);
+		projectEntity.setTaskEntityList(taskEntityList);
 		ProjectEntity projectEntity1=createProjectEntity("2019-01-09","2019-01-20","Test Project 1",2,1);
 		
 		projectEntityList.add(projectEntity);
@@ -100,6 +122,8 @@ public class ProjectServiceTest {
 			
 		List<ProjectBO> result = projectService.findAllProjects();
 		assertEquals(2, result.size());
+		assertEquals(1, result.get(0).getTaskCompleted());
+		assertEquals(1, result.get(0).getTaskCount());
 	}
 	@Test
 	public void testCreateProject() throws Exception{		

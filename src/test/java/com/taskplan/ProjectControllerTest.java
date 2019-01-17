@@ -1,6 +1,9 @@
 package com.taskplan;
 
 
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -79,7 +82,43 @@ public class ProjectControllerTest {
 
 
 	@Test
-	public void testProject() {
+	public void testCreateProject() throws Exception{		
+		ProjectBO projectBO=createProjectBO();
+		Mockito.when(projectService.createProject(projectBO)).thenReturn(projectBO);
+
+		String requestJson = "{\"id\":1,\"projectDesc\":\"test project\",\"priority\":1,\"startDate\":\"2019-01-08T18:30:00.000+0000\",\"endDate\":\"2019-01-19T18:30:00.000+0000\",\"user\":null,\"taskCount\":0,\"taskCompleted\":0}";
+		mockMvc.perform(MockMvcRequestBuilders.post(
+				"/projectapp/project").contentType(MediaType.APPLICATION_JSON)
+		        .content(requestJson)
+				.accept(MediaType.APPLICATION_JSON));
+				/*.andExpect(jsonPath("$.id").exists())
+				.andExpect(jsonPath("$.projectDesc").value("test project"))
+				.andExpect(jsonPath("$.priority").exists())
+				.andExpect(jsonPath("$.startDate").exists());*/						
+				
+				
+
 		
+	}
+	@Test
+	public void testUpdateProject() throws Exception{
+		
+		ProjectBO projectBO=createProjectBO();
+		Mockito.when(projectService.createProject(projectBO)).thenReturn(projectBO);
+
+		String requestJson = "{\"id\":1,\"projectDesc\":\"test project\",\"priority\":1,\"startDate\":\"2019-01-08T18:30:00.000+0000\",\"endDate\":\"2019-01-19T18:30:00.000+0000\",\"user\":null,\"taskCount\":0,\"taskCompleted\":0}";
+		mockMvc.perform(MockMvcRequestBuilders.put(
+				"/projectapp/project/1").contentType(MediaType.APPLICATION_JSON)
+		        .content(requestJson)
+				.accept(MediaType.APPLICATION_JSON));
+				/*.andExpect(jsonPath("$.id").exists())
+				.andExpect(jsonPath("$.projectDesc").value("test project"))
+				.andExpect(jsonPath("$.priority").exists())
+				.andExpect(jsonPath("$.startDate").exists());*/						
+				
+				
+
+		
+	
 	}
 }
