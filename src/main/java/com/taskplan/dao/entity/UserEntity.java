@@ -12,6 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name="users")
@@ -40,6 +41,8 @@ public class UserEntity implements Serializable{
 	@JoinColumn(name="task_id")
 	private TaskEntity taskEntity;
 
+	@Transient
+	private boolean allowDelete;
 
 	public long getId() {
 		return id;
@@ -88,9 +91,15 @@ public class UserEntity implements Serializable{
 	public void setTaskEntity(TaskEntity taskEntity) {
 		this.taskEntity = taskEntity;
 	}
- 	
- 	
- 	
+
+	public boolean isAllowDelete() {
+		if(projectEntity ==null && taskEntity==null) {
+			this.allowDelete= true;
+		}else {
+			this.allowDelete= false;
+		}
+		return allowDelete;
+	}	
 
  	
 }

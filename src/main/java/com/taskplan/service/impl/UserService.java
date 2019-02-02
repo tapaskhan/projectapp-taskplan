@@ -19,6 +19,12 @@ public class UserService implements IUserService {
 	@Autowired
 	private UserMapper mapper;
 	@Override
+	public List<UserBO> findAllUsers() {
+		List<UserEntity> userEntityList= userRepo.findAll();		
+		List<UserBO> userBOList=mapper.convertToUserBO(userEntityList);
+		return userBOList;
+	}
+	@Override
 	public List<UserBO> findAllUnAssignedUsers() {
 		List<UserEntity> userEntityList= userRepo.findAllUnassignedUsers();		
 		List<UserBO> userBOList=mapper.convertToUserBO(userEntityList);
@@ -49,6 +55,10 @@ public class UserService implements IUserService {
 			savedUserBO=mapper.convertToResource(savedUserEntity);
 		}
 		return savedUserBO;
+	}
+	@Override
+	public void deleteUser(String userId) {
+		userRepo.deleteById(new Long(userId));		
 	}
 	
 }

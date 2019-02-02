@@ -71,10 +71,10 @@ public class ProjectControllerTest {
 
 		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
 
-		//System.out.println("Result::>>"+result.getResponse().getContentAsString());
+		
 		String expected = "[{\"id\":1,\"projectDesc\":\"test project\",\"priority\":1,\"startDate\":\"2019-01-08T18:30:00.000+0000\",\"endDate\":\"2019-01-19T18:30:00.000+0000\",\"user\":null,\"taskCount\":0,\"taskCompleted\":0}]";
 
-		// {"id":"Course1","name":"Spring","description":"10 Steps, 25 Examples and 10K Students","steps":["Learn Maven","Import Project","First Example","Second Example"]}
+		 
 		
 		JSONAssert.assertEquals(expected, result.getResponse()
 				.getContentAsString(), true);
@@ -91,10 +91,7 @@ public class ProjectControllerTest {
 				"/projectapp/project").contentType(MediaType.APPLICATION_JSON)
 		        .content(requestJson)
 				.accept(MediaType.APPLICATION_JSON));
-				/*.andExpect(jsonPath("$.id").exists())
-				.andExpect(jsonPath("$.projectDesc").value("test project"))
-				.andExpect(jsonPath("$.priority").exists())
-				.andExpect(jsonPath("$.startDate").exists());*/						
+										
 				
 				
 
@@ -111,10 +108,7 @@ public class ProjectControllerTest {
 				"/projectapp/project/1").contentType(MediaType.APPLICATION_JSON)
 		        .content(requestJson)
 				.accept(MediaType.APPLICATION_JSON));
-				/*.andExpect(jsonPath("$.id").exists())
-				.andExpect(jsonPath("$.projectDesc").value("test project"))
-				.andExpect(jsonPath("$.priority").exists())
-				.andExpect(jsonPath("$.startDate").exists());*/						
+									
 				
 				
 

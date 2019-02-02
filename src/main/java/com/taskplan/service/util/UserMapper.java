@@ -17,7 +17,7 @@ public class UserMapper extends BaseMapper<UserBO, UserEntity>{
 		if(userEntityList!=null) {
 			userBOList=new ArrayList<UserBO>();
 			for(UserEntity userEntity:userEntityList) {
-				UserBO userBO=convertToResource(userEntity);
+				UserBO userBO=convertToResource(userEntity);				
 				userBOList.add(userBO);
 			}
 		}

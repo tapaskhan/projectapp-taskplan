@@ -21,6 +21,8 @@ import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.taskplan.dao.entity.ProjectEntity;
+import com.taskplan.dao.entity.TaskEntity;
 import com.taskplan.dao.entity.UserEntity;
 import com.taskplan.model.UserBO;
 import com.taskplan.repository.UserRepository;
@@ -117,6 +119,42 @@ public class UserServiceTest {
 		assertEquals("LastName", savedUserBOList.get(0).getLastName());
 		assertEquals(new Integer(111), savedUserBOList.get(0).getEmployeeId());
 			
+	}
+	@Test
+	public void testFindAllUsers() throws Exception{		
+		UserEntity userEntity=createUserEntity(1,"First Name","LastName",111);
+		UserEntity userEntity1=createUserEntity(2,"Second Name","Second LastName",112);
+		
+		userEntity.setProjectEntity(new ProjectEntity());
+		userEntity.setTaskEntity(new TaskEntity());
+		UserBO userBO=new UserMapper().convertToResource(userEntity);		
+		UserBO userBO1=new UserMapper().convertToResource(userEntity1);
+		List<UserEntity> userEntityList=new ArrayList<UserEntity>();
+		userEntityList.add(userEntity);
+		userEntityList.add(userEntity1);
+		when(mapper.convertToResource(userEntity)).thenReturn(userBO);
+		when(mapper.convertToResource(userEntity1)).thenReturn(userBO1);
+		when(mapper.convertToUserBO(userEntityList)).thenCallRealMethod();
+		when(userRepo.findAll()).thenReturn(userEntityList);
+		
+		List<UserBO> savedUserBOList=userService.findAllUsers();
+		assertEquals(2, savedUserBOList.size());
+		assertEquals("First Name", savedUserBOList.get(0).getFirstName());
+		assertEquals("LastName", savedUserBOList.get(0).getLastName());
+		assertEquals(new Integer(111), savedUserBOList.get(0).getEmployeeId());
+		assertEquals(false, savedUserBOList.get(0).isAllowDelete());
+		assertEquals("Second Name", savedUserBOList.get(1).getFirstName());
+		assertEquals("Second LastName", savedUserBOList.get(1).getLastName());
+		assertEquals(new Integer(112), savedUserBOList.get(1).getEmployeeId());
+		assertEquals(true, savedUserBOList.get(1).isAllowDelete());
+			
+	}
+	@Test
+	public void testDeleteUser() {
+		UserBO userBO=createUserBO(1,"First Name","LastName",111);
+		userService.deleteUser("1");
+		verify(userRepo, times(1)).deleteById(new Long(1));
+
 	}
 
 }
