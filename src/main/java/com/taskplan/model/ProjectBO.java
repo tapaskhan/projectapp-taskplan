@@ -14,6 +14,7 @@ public class ProjectBO {
     private UserBO user;
     private int taskCount;
     private int taskCompleted;
+    private boolean inactive;
     
 	public int getTaskCount() {
 		return taskCount;
@@ -63,6 +64,12 @@ public class ProjectBO {
 	}
 	public void setUser(UserBO user) {
 		this.user = user;
+	}
+	public boolean isInactive() {
+		return inactive;
+	}
+	public void setInactive(boolean inactive) {
+		this.inactive = inactive;
 	}
 
 }

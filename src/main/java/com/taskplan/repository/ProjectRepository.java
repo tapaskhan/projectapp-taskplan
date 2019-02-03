@@ -11,6 +11,6 @@ import com.taskplan.dao.entity.ProjectEntity;
 @Repository
 public interface ProjectRepository extends JpaRepository<ProjectEntity, Long>{
 
-	//@Query(IQuery.PROJECT_FINDALL)
-	//List<ProjectEntity> findAllProjects();
+	@Query(IQuery.PROJECT_FIND_ALL_ACTIVE)
+	List<ProjectEntity> findAllActiveProjects();
 }

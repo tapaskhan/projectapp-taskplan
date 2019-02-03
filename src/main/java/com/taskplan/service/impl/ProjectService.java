@@ -30,6 +30,13 @@ public class ProjectService implements IProjectService {
 		return projectBOList;
 	}
 	@Override
+	public List<ProjectBO> findAllActiveProjects() {
+		List<ProjectEntity> projectEntityList= projectRepo.findAllActiveProjects();		
+		List<ProjectBO> projectBOList=mapper.convertToProjectBO(projectEntityList);
+		return projectBOList;
+	}
+	
+	@Override
 	public ProjectBO createProject(ProjectBO projectBO) {		
 		ProjectEntity projectEntity=mapper.convertToEntity(projectBO);		
 		ProjectEntity savedProjectEntity =projectRepo.save(projectEntity);
@@ -71,5 +78,19 @@ public class ProjectService implements IProjectService {
 		}
 		return savedProjectBO;
 	}
+	@Override
+	public ProjectBO updateProjectStatus(String projectId,ProjectBO projectBO) {		
+		ProjectEntity projectEntity=projectRepo.getOne(new Long(projectId));
+		
+		ProjectBO savedProjectBO=null;
+		if(projectEntity!=null) {
+			projectEntity.setInactive(projectBO.isInactive());			
+			ProjectEntity savedProjectEntity =projectRepo.save(projectEntity);
+			savedProjectBO=mapper.convertToResource(savedProjectEntity);			
+			
+		}
+		return savedProjectBO;
+	}
+	
 
 }

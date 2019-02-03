@@ -46,12 +46,16 @@ public class ProjectEntity implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date endDate;
 
+    @Column(nullable = false, columnDefinition = "TINYINT(1)")
+    private boolean inactive;
+    
     @OneToMany(mappedBy="projectEntity")
     private List<TaskEntity> taskEntityList;
 
     
     @OneToOne(mappedBy="projectEntity",cascade=CascadeType.ALL)	   
     private UserEntity userEntity;
+    
     
 	public long getId() {
 		return id;
@@ -108,5 +112,14 @@ public class ProjectEntity implements Serializable {
 	public void setUserEntity(UserEntity userEntity) {
 		this.userEntity = userEntity;
 	}
-    
+
+	public boolean isInactive() {
+		return inactive;
+	}
+
+	public void setInactive(boolean inactive) {
+		this.inactive = inactive;
+	}
+
+	    
 }
