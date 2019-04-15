@@ -97,6 +97,11 @@ public class TaskService implements ITaskService{
 		if(taskBO.getParentTaskDetails()!=null) {
 			parentTaskEntity =parentTaskRepo.getOne(taskBO.getParentTaskDetails().getId());
 		}
+		if(taskBO.getIsParentTask() && parentTaskEntity!=null && taskBO.getParentTaskDetails()!=null
+				&& !parentTaskEntity.getParentTaskDec().equalsIgnoreCase(taskBO.getParentTaskDetails().getParentTaskDec())) {
+			parentTaskEntity.setParentTaskDec(taskBO.getParentTaskDetails().getParentTaskDec());
+			parentTaskEntity=parentTaskRepo.save(parentTaskEntity);
+		}
 		UserEntity userEntity=null;
 		UserEntity previousUserEntity=taskEntity.getUserEntity();
 		if(taskBO.getUser()!=null) {

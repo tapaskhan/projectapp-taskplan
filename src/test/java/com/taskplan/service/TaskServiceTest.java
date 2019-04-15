@@ -224,4 +224,32 @@ public class TaskServiceTest {
 		assertEquals(taskBO.getTaskDesc(), savedTaskBO.getTaskDesc());
 		assertEquals(taskBO.getUser().getFirstName(), savedTaskBO.getUser().getFirstName());
 	}
+	@Test
+	public void testUpdateParentTask() throws Exception{
+		TaskEntity taskEntity=createTaskEntity(1,"2019-01-09","2019-01-20",1,"Task Desc");
+		taskEntity.setTaskDesc(null);//for parent task
+		ParentTaskEntity parentTaskEntity=new ParentTaskEntity();
+		parentTaskEntity.setId(1);
+		parentTaskEntity.setParentTaskDec("Parent Task Old");
+		taskEntity.setParentTaskEntity(parentTaskEntity);
+		ProjectEntity projectEntity=createProjectEntity("2019-01-09","2019-01-20","Test Project",1,1);
+		taskEntity.setProjectEntity(projectEntity);
+		UserEntity userEntity=createUserEntity(1,"First Name","LastName",111);
+		taskEntity.setUserEntity(userEntity);
+		TaskBO taskBO=new TaskMapper().convertToResource(taskEntity);
+		taskBO.getParentTaskDetails().setParentTaskDec("Parent Task New");
+		
+		when(taskRepo.getOne(taskBO.getId())).thenReturn(taskEntity);
+		when(parentTaskRepo.getOne(taskBO.getParentTaskDetails().getId())).thenReturn(parentTaskEntity);
+		when(parentTaskRepo.save(parentTaskEntity)).thenReturn(parentTaskEntity);
+		when(userRepo.getOne(new Long(taskBO.getUser().getId()))).thenReturn(userEntity);
+		
+		//when(parentTaskRepo.save(parentTaskEntity)).thenReturn(parentTaskEntity);
+		when(taskRepo.save(taskEntity)).thenReturn(taskEntity);
+		when(mapper.convertToResource(taskEntity)).thenCallRealMethod();
+		TaskBO savedTaskBO= taskService.updateTask(taskBO, "1");
+		assertEquals(taskBO.getParentTaskDetails().getParentTaskDec(), savedTaskBO.getParentTaskDetails().getParentTaskDec());
+		
+		
+	}
 }

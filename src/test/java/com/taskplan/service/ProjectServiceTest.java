@@ -126,6 +126,27 @@ public class ProjectServiceTest {
 		assertEquals(1, result.get(0).getTaskCount());
 	}
 	@Test
+	public void testFindAllActiveProjects() throws Exception{
+		List<ProjectEntity> projectEntityList = new ArrayList<ProjectEntity>();
+		List<TaskEntity> taskEntityList = new ArrayList<TaskEntity>();
+		TaskEntity taskEntity=createTaskEntity(1,"2019-01-09","2019-01-20",1,"Task Desc");
+		ProjectEntity projectEntity=createProjectEntity("2019-01-09","2019-01-20","Test Project",1,1);
+		taskEntityList.add(taskEntity);
+		projectEntity.setTaskEntityList(taskEntityList);
+		ProjectEntity projectEntity1=createProjectEntity("2019-01-09","2019-01-20","Test Project 1",2,1);
+		
+		projectEntityList.add(projectEntity);
+		projectEntityList.add(projectEntity1);
+		List<ProjectBO> projectBOList=new ProjectMapper().convertToProjectBO(projectEntityList);
+		when(projectRepo.findAllActiveProjects()).thenReturn(projectEntityList);
+		when(mapper.convertToProjectBO(projectEntityList)).thenReturn(projectBOList);
+			
+		List<ProjectBO> result = projectService.findAllActiveProjects();
+		assertEquals(2, result.size());
+		assertEquals(1, result.get(0).getTaskCompleted());
+		assertEquals(1, result.get(0).getTaskCount());
+	}
+	@Test
 	public void testCreateProject() throws Exception{		
 		UserEntity userEntity=createUserEntity(1,"First Name","LastName",111);
 		ProjectBO projectBO=createProjectBO("2019-01-09","2019-01-20","Test Project",1,1);
@@ -178,5 +199,32 @@ public class ProjectServiceTest {
 		assertEquals("First Name",savedProjectBO.getUser().getFirstName());
 		assertEquals("LastName",savedProjectBO.getUser().getLastName());
 		assertEquals(new Integer(111),savedProjectBO.getUser().getEmployeeId());
+	}
+	@Test
+	public void testUpdateProjectStatus() throws Exception{	
+		UserEntity previousUserEntity=createUserEntity(2,"Another First Name","Another LastName",111);
+		
+		ProjectEntity projectEntity=createProjectEntity("2019-01-09","2019-01-20","Test Project",1,1);
+		ProjectBO projectBO =new ProjectMapper().convertToResource(projectEntity);
+		projectEntity.setUserEntity(previousUserEntity);
+		UserBO userBO=new UserBO();
+		userBO.setId(1);
+		projectBO.setUser(userBO);
+		projectBO.setInactive(true);
+		//when(projectMapper.convertToEntity(projectBO)).thenReturn(projectEntity);
+		when(projectRepo.getOne(new Long(1))).thenReturn(projectEntity);
+		when(projectRepo.save(projectEntity)).thenReturn(projectEntity);
+		when(mapper.convertToResource(projectEntity)).thenReturn(projectBO);
+		
+		
+		ProjectBO savedProjectBO = projectService.updateProjectStatus("1", projectBO);
+		assertEquals("Test Project", savedProjectBO.getProjectDesc());
+		
+		assertEquals(1, savedProjectBO.getId());
+		assertEquals(1, savedProjectBO.getPriority());		
+		assertEquals(0, savedProjectBO.getTaskCount());
+		assertEquals(0, savedProjectBO.getTaskCompleted());
+		assertEquals(true,savedProjectBO.isInactive());
+		
 	}
 }

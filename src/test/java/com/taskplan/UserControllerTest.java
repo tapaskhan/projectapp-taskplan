@@ -28,6 +28,8 @@ public class UserControllerTest {
 	@Autowired
 	private MockMvc mockMvc;
 	
+	private String testName;
+	
 	@MockBean
 	private UserService userService;
 	private UserBO createUserBO(int id ,String firstName,String lastName,int employeeId) {

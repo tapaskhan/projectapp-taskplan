@@ -56,14 +56,15 @@ public class ProjectControllerTest {
 		projectBO.setPriority(1);
 		projectBO.setProjectDesc("test project");
 		projectBO.setId(1);
+		projectBO.setInactive(false);
 		return projectBO;
 	}
 
 	@Test
-	public void testGetAllProjects() throws Exception {
+	public void testGetAllActiveProjects() throws Exception {
 		List<ProjectBO> projectBOlist=new ArrayList<ProjectBO>();
 		projectBOlist.add(createProjectBO());
-		Mockito.when(projectService.findAllProjects()).thenReturn(projectBOlist);
+		Mockito.when(projectService.findAllActiveProjects()).thenReturn(projectBOlist);
 
 		RequestBuilder requestBuilder = MockMvcRequestBuilders.get(
 				"/projectapp/projects").accept(
@@ -72,9 +73,29 @@ public class ProjectControllerTest {
 		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
 
 		
-		String expected = "[{\"id\":1,\"projectDesc\":\"test project\",\"priority\":1,\"startDate\":\"2019-01-08T18:30:00.000+0000\",\"endDate\":\"2019-01-19T18:30:00.000+0000\",\"user\":null,\"taskCount\":0,\"taskCompleted\":0}]";
+		String expected = "[{\"id\":1,\"projectDesc\":\"test project\",\"priority\":1,\"startDate\":\"2019-01-08T18:30:00.000+0000\",\"endDate\":\"2019-01-19T18:30:00.000+0000\",\"user\":null,\"taskCount\":0,\"taskCompleted\":0,\"inactive\":false}]";
 
-		 
+		
+		
+		JSONAssert.assertEquals(expected, result.getResponse()
+				.getContentAsString(), true);
+	}
+	@Test
+	public void testGetAllProjects() throws Exception {
+		List<ProjectBO> projectBOlist=new ArrayList<ProjectBO>();
+		projectBOlist.add(createProjectBO());
+		Mockito.when(projectService.findAllProjects()).thenReturn(projectBOlist);
+
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.get(
+				"/projectapp/allprojects").accept(
+				MediaType.APPLICATION_JSON);
+
+		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+
+		
+		String expected = "[{\"id\":1,\"projectDesc\":\"test project\",\"priority\":1,\"startDate\":\"2019-01-08T18:30:00.000+0000\",\"endDate\":\"2019-01-19T18:30:00.000+0000\",\"user\":null,\"taskCount\":0,\"taskCompleted\":0,\"inactive\":false}]";
+
+		
 		
 		JSONAssert.assertEquals(expected, result.getResponse()
 				.getContentAsString(), true);
@@ -101,18 +122,28 @@ public class ProjectControllerTest {
 	public void testUpdateProject() throws Exception{
 		
 		ProjectBO projectBO=createProjectBO();
-		Mockito.when(projectService.createProject(projectBO)).thenReturn(projectBO);
+		Mockito.when(projectService.updateProject("1", projectBO)).thenReturn(projectBO);
 
 		String requestJson = "{\"id\":1,\"projectDesc\":\"test project\",\"priority\":1,\"startDate\":\"2019-01-08T18:30:00.000+0000\",\"endDate\":\"2019-01-19T18:30:00.000+0000\",\"user\":null,\"taskCount\":0,\"taskCompleted\":0}";
 		mockMvc.perform(MockMvcRequestBuilders.put(
 				"/projectapp/project/1").contentType(MediaType.APPLICATION_JSON)
 		        .content(requestJson)
-				.accept(MediaType.APPLICATION_JSON));
-									
-				
-				
-
+				.accept(MediaType.APPLICATION_JSON));	
+	}
+	@Test
+	public void testUpdateProjectStatus() throws Exception{
 		
+		ProjectBO projectBO=createProjectBO();
+		projectBO.setInactive(true);
+		Mockito.when(projectService.updateProjectStatus("1",projectBO)).thenReturn(projectBO);
+
+		String requestJson = "{\"inactive\":\"true\"}";
+		
+		mockMvc.perform(MockMvcRequestBuilders.put(
+				"/projectapp/project/1/status").contentType(MediaType.APPLICATION_JSON)
+		        .content(requestJson)
+				.accept(MediaType.APPLICATION_JSON));
+			
 	
 	}
 }

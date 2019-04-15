@@ -18,6 +18,8 @@ public class UserService implements IUserService {
 	private UserRepository userRepo;
 	@Autowired
 	private UserMapper mapper;
+	
+	
 	@Override
 	public List<UserBO> findAllUsers() {
 		List<UserEntity> userEntityList= userRepo.findAll();		
@@ -59,6 +61,12 @@ public class UserService implements IUserService {
 	@Override
 	public void deleteUser(String userId) {
 		userRepo.deleteById(new Long(userId));		
+	}
+	public void setUserRepo(UserRepository userRepo) {
+		this.userRepo = userRepo;
+	}
+	public void setMapper(UserMapper mapper) {
+		this.mapper = mapper;
 	}
 	
 }
