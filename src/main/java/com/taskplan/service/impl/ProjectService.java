@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.taskplan.dao.entity.ProjectEntity;
 import com.taskplan.dao.entity.UserEntity;
@@ -23,20 +24,20 @@ public class ProjectService implements IProjectService {
 	@Autowired
 	private ProjectMapper mapper;
 	
-	@Override
+	@Override	
 	public List<ProjectBO> findAllProjects() {
 		List<ProjectEntity> projectEntityList= projectRepo.findAll();		
 		List<ProjectBO> projectBOList=mapper.convertToProjectBO(projectEntityList);
 		return projectBOList;
 	}
-	@Override
+	@Override	
 	public List<ProjectBO> findAllActiveProjects() {
 		List<ProjectEntity> projectEntityList= projectRepo.findAllActiveProjects();		
 		List<ProjectBO> projectBOList=mapper.convertToProjectBO(projectEntityList);
 		return projectBOList;
 	}
 	
-	@Override
+	@Override	
 	public ProjectBO createProject(ProjectBO projectBO) {		
 		ProjectEntity projectEntity=mapper.convertToEntity(projectBO);		
 		ProjectEntity savedProjectEntity =projectRepo.save(projectEntity);
@@ -49,7 +50,7 @@ public class ProjectService implements IProjectService {
 		ProjectBO savedProjectBO=mapper.convertToResource(savedProjectEntity);
 		return savedProjectBO;
 	}
-	@Override
+	@Override	
 	public ProjectBO updateProject(String projectId,ProjectBO projectBO) {		
 		ProjectEntity projectEntity=projectRepo.getOne(new Long(projectId));
 		UserEntity previousUserEntity=projectEntity.getUserEntity();
@@ -78,7 +79,7 @@ public class ProjectService implements IProjectService {
 		}
 		return savedProjectBO;
 	}
-	@Override
+	@Override	
 	public ProjectBO updateProjectStatus(String projectId,ProjectBO projectBO) {		
 		ProjectEntity projectEntity=projectRepo.getOne(new Long(projectId));
 		

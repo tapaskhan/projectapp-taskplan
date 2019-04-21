@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.taskplan.dao.entity.ParentTaskEntity;
 import com.taskplan.dao.entity.ProjectEntity;
@@ -31,20 +32,20 @@ public class TaskService implements ITaskService{
 	private UserRepository userRepo;
 	@Autowired
 	private TaskMapper mapper;
-	@Override
+	@Override	
 	public List<TaskBO> findAllTasksByProjectId(String projectId) {
 		List<TaskEntity> taskEntityList= taskRepo.findAllTasksByProjectId(new Long(projectId));		
 		List<TaskBO> taskBOList=mapper.convertToTaskBOList(taskEntityList);
 		return taskBOList;
 	}
-	@Override
+	@Override	
 	public List<ParentTaskBO> findAllParentTasksByProjectId(String projectId) {
 		List<TaskEntity> taskEntityList= taskRepo.findAllTasksByProjectId(new Long(projectId));		
 		List<ParentTaskBO> parentTaskBOList=mapper.convertToParentTaskBOList(taskEntityList);
 		return parentTaskBOList;
 	}
 
-	@Override
+	@Override	
 	public TaskBO createTasks(TaskBO taskBO) {		
 		TaskBO savedTaskBO=null;
 		if(taskBO.getProject()!=null) {
@@ -85,7 +86,7 @@ public class TaskService implements ITaskService{
 		return savedTaskBO;
 	}
 
-	@Override
+	@Override	
 	public TaskBO updateTask(TaskBO taskBO,String taskid) {
 		if(taskBO==null) {
 			return null;

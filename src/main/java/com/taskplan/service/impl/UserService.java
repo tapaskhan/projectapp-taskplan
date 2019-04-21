@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.taskplan.dao.entity.UserEntity;
 import com.taskplan.model.UserBO;
@@ -20,7 +21,7 @@ public class UserService implements IUserService {
 	private UserMapper mapper;
 	
 	
-	@Override
+	@Override	
 	public List<UserBO> findAllUsers() {
 		List<UserEntity> userEntityList= userRepo.findAll();		
 		List<UserBO> userBOList=mapper.convertToUserBO(userEntityList);
@@ -32,20 +33,20 @@ public class UserService implements IUserService {
 		List<UserBO> userBOList=mapper.convertToUserBO(userEntityList);
 		return userBOList;
 	}
-	@Override
+	@Override	
 	public List<UserBO> findAllUnAssignedTaskUsers() {
 		List<UserEntity> userEntityList= userRepo.findAllUnassignedTaskUsers();
 		List<UserBO> userBOList=mapper.convertToUserBO(userEntityList);
 		return userBOList;
 	}
-	@Override
+	@Override	
 	public UserBO createUser(UserBO userBO) {		
 		UserEntity userEntity=mapper.convertToEntity(userBO);
 		UserEntity savedUserEntity =userRepo.save(userEntity);
 		UserBO savedUserBO=mapper.convertToResource(savedUserEntity);
 		return savedUserBO;
 	}
-	@Override
+	@Override	
 	public UserBO updateUser(String userId, UserBO userBO) {		
 		UserBO savedUserBO=null;
 		UserEntity userEntity=userRepo.getOne(new Long(userId));
@@ -58,15 +59,10 @@ public class UserService implements IUserService {
 		}
 		return savedUserBO;
 	}
-	@Override
+	@Override	
 	public void deleteUser(String userId) {
 		userRepo.deleteById(new Long(userId));		
 	}
-	public void setUserRepo(UserRepository userRepo) {
-		this.userRepo = userRepo;
-	}
-	public void setMapper(UserMapper mapper) {
-		this.mapper = mapper;
-	}
+	
 	
 }
